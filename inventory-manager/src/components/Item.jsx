@@ -10,6 +10,22 @@ const rarityColors = {
 const Item = ({ id, name, icon, category, rarity, stats }) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id });
   const [isHovered, setIsHovered] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+
+  const handleMouseEnter = (event) => {
+    setIsHovered(true);
+
+    const rect = event.currentTarget.getBoundingClientRect();
+
+    setTooltipPosition({
+      top: rect.top - 20,
+      left: rect.left + rect.width / 2, 
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   return (
     <div
@@ -17,12 +33,19 @@ const Item = ({ id, name, icon, category, rarity, stats }) => {
       {...attributes}
       {...listeners}
       className="item-container"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <img src={icon} alt={name} className="item" />
       {isHovered && (
-        <div className="tooltip">
+        <div
+          className="tooltip"
+          style={{
+            top: `${tooltipPosition.top}px`,
+            left: `${tooltipPosition.left}px`,
+            transform: 'translate(-50%, -100%)',
+          }}
+        >
           <p className="tooltip-name">{name}</p>
           <p>Type: {category}</p>
           <p>

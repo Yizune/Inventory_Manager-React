@@ -28,7 +28,7 @@ function Backpack({ items, activeDragItemId }) {
                   stats={item.stats}
                 />
               ) : (
-                'Empty'
+                <span className="empty-slot">Empty</span>
               )}
             </div>
           );
